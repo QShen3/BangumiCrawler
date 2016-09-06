@@ -8,7 +8,7 @@ for( let i=0; i<192240; i++){
     }
     catch(e){
         console.log(e);
-        fs.writeFileSync('failed.txt', i + ' request' + '\n');
+        fs.appendFileSync('failed.txt', i + ' request' + '\n');
         continue;
     }
     
@@ -21,7 +21,7 @@ for( let i=0; i<192240; i++){
     }
     catch(e){
         console.log(e);
-        fs.writeFileSync('failed.txt', i + ' json parse' + '\n');
+        fs.appendFileSync('failed.txt', i + ' json parse' + '\n');
         continue;
     }   
     
@@ -184,10 +184,10 @@ for( let i=0; i<192240; i++){
     animation.save(function(err){
         if(err){
             console.log('db err ' + err);
-            fs.writeFileSync('failed.txt', i + ' db' + '\n');
+            fs.appendFileSync('failed.txt', i + ' db' + '\n');
         }
         else{
-            fs.writeFileSync('succesed.txt', i + '\n');
+            fs.appendFileSync('succesed.txt', i + '\n');
         }
     })
 }
