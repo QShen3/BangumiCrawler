@@ -181,6 +181,7 @@ for( let i=0; i<192240; i++){
         }
     }
 
+    fs.appendFileSync('ready.txt', i + ' ' + item.name_cn + ' ' + item.name + '\n');
     animation.save(function(err){
         if(err){
             console.log('db err ' + err);
