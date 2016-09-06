@@ -1,0 +1,16 @@
+{
+  "name": "bangumicrawler",
+  "version": "1.0.0",
+  "description": "no description",
+  "main": "main.js",
+  "dependencies": {
+    "mongoose": "^4.6.0",
+    "urllib-sync": "^1.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "QShen",
+  "license": "MIT"
+}
