@@ -2,7 +2,7 @@ const urllib_sync = require('urllib-sync');
 const fs = require('fs');
 const Animation = require('./db.js').animation
 
-for( let i=158316; i<158326; i++){
+for( let i=0; i<192240; i++){
     try{
         var res = urllib_sync.request('http://api.bgm.tv/subject/' + i + '?responseGroup=large');
     }
