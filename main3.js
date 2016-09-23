@@ -2,7 +2,7 @@ const urllib_sync = require('urllib-sync');
 const fs = require('fs');
 const Animation = require('./db.js').animation
 
-var input = fs.readFileSync("failed2.txt").toString().split('\n');
+var input = fs.readFileSync("failed3.txt").toString().split('\n');
 for (let i = 0; i < input.length; i++) {
     input[i] = parseInt(input[i]);
 }
@@ -14,7 +14,7 @@ function get(i) {
     }
     catch (e) {
         console.log(e);
-        fs.appendFileSync('failed3.txt', input[i] + ' request' + '\n');
+        fs.appendFileSync('failed4.txt', input[i] + ' request' + '\n');
         i++;
         if (i < input.length) {
             get(i);
@@ -32,7 +32,7 @@ function get(i) {
                 return;
             }
         }
-        fs.appendFileSync('failed3.txt', input[i] + ' request res ' + res.status + '\n');
+        fs.appendFileSync('failed4.txt', input[i] + ' request res ' + res.status + '\n');
         i++;
         if (i < input.length) {
             get(i);
@@ -239,7 +239,7 @@ function get(i) {
     animation.save(function (err) {
         if (err) {
             console.log('db err ' + err);
-            fs.appendFileSync('failed3.txt', input[i] + ' db' + '\n');
+            fs.appendFileSync('failed4.txt', input[i] + ' db' + '\n');
         }
         else {
             fs.appendFileSync('succesed.txt', input[i] + '\n');
