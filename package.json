@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "mongoose": "^4.6.0",
+    "qiniu": "^6.1.11",
     "urllib-sync": "^1.1.3"
   },
   "devDependencies": {},

@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost/QVideo');
+var user = "QShen";
+var password = "szy19960423mongo";
+var url = "localhost/QVideo"
+//var url = "qshen.cc/QVideo"
+mongoose.connect('mongodb://' + user + ':' + password + '@' + url);
 
 var db = mongoose.connection;
 db.on('error', function (err) {
@@ -39,6 +43,7 @@ var epsoid = {
         duration: { type: String},
         airDate: { type: Date},
         desc: { type: String},
+        views: { type: Number, default: 0},
         video: { type: [video]}
     }
 
@@ -47,11 +52,18 @@ var animationSchema = new mongoose.Schema(
     {
         name: { type: String },
         name_cn: { type: String},
-        bangumiId: {type: Number},
+        bangumiId: {type: String},
         summary: {type: String},
         airDate: { type: Date},
         updateDate: {type: Date, default: Date.now},
         airWeekday: { type: String},
+        views: { type: Number, default: 0},
+        weeklyViews: { type: Number, default: 0},
+        monthlyViews: { type: Number, default: 0},
+        yearlyViews: { type: Number, default: 0},
+        state: { type: String},
+        type: { type: String},
+        quarter: { type: String},
         image: {
             large: String,
             common: String,
