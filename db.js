@@ -4,8 +4,8 @@ mongoose.Promise = global.Promise;
 
 var user = "QShen";
 var password = "szy19960423mongo";
-var url = "localhost/QVideo"
-//var url = "qshen.cc/QVideo"
+//var url = "localhost/QVideo"
+var url = "qshen.cc/QVideo"
 mongoose.connect('mongodb://' + user + ':' + password + '@' + url);
 
 var db = mongoose.connection;
