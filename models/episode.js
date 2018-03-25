@@ -6,14 +6,20 @@ const EpisodeSchema = new Schema({
     name: { type: String },
     name_cn: { type: String },
     duration: { type: Number },
-    air_date: { type: Date },
+    air_date: { type: String },
+    air_time: {type: String},
     desc: { type: String },
     status: { type: Number, default: 0 }, //0: not air, 1: air
     staff: [{
         name: { type: String },
         name_cn: { type: String },
         jobs: [{type: String}],
-        info: { type: Schema.Types.ObjectId, ref: 'Staff' }
+        id: { type: Schema.Types.ObjectId }
+    }],
+    network_src: [{
+        from: {type: String},
+        from_cn: {type: String},
+        url: {type: String}
     }]
 });
 

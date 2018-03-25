@@ -12,7 +12,7 @@ const StaffSchema = new Schema({
         grid: { type: String },
     },
     info: { type: Schema.Types.Mixed },
-    jobs: [String]
+    jobs: [{type: String}]
 });
 
 StaffSchema.index({ name: 1 });
