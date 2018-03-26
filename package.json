@@ -4,8 +4,9 @@
   "description": "no description",
   "main": "main.js",
   "dependencies": {
-    "mongoose": "^4.6.0",
-    "time-formater": "^1.0.1"
+    "mongoose": "^5.0.11",
+    "time-formater": "^1.0.1",
+    "urllib": "^2.26.0"
   },
   "devDependencies": {},
   "scripts": {

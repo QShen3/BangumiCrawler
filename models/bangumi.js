@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dtime = require('time-formater');
 
 const Schema = mongoose.Schema;
 
@@ -7,10 +8,12 @@ const BangumiSchema = new Schema({
     name_cn: { type: String },
     summary: { type: String },
     air_date: { type: String },
-    air_time: {type: String},
+    air_time: { type: String },
     type: { type: String, enum: ['tv', 'ova', 'movie', 'web', 'special_tv', 'other'] },
     country: { type: String },
     quarter: { type: String, enum: ['', 'winter', 'spring', 'summer', 'autumn'] },
+    website: { type: String },
+    twitter: { type: String },
     images: {
         large: { type: String },
         common: { type: String },
@@ -43,20 +46,25 @@ const BangumiSchema = new Schema({
         name: { type: String },
         name_cn: { type: String },
         id: { type: Schema.Types.ObjectId },
-        air_date: {type: String},
-        air_time: {type: String},
+        air_date: { type: String },
+        air_time: { type: String },
     }],
     network: [{
         name: { type: String },
         name_cn: { type: String },
         id: { type: Schema.Types.ObjectId },
-        url: {type: String},  
-        air_date: {type: String},
-        air_time: {type: String},     
+        url: { type: String },
+        air_date: { type: String },
+        air_time: { type: String },
+    }],
+    other_website: [{
+        name: {type: String},
+        url: {type: String},
+        id: {type: String}
     }],
     create_time: { type: Date, default: Date.now },
     update_time: { type: Date, default: Date.now },
-    views: { type: Number }
+    views: { type: Number, default: 0 }
 }, { toJSON: { virtuals: true } });
 
 BangumiSchema.index({ name: 1 });
@@ -75,7 +83,17 @@ BangumiSchema.virtual('air_month').get(() => {
 BangumiSchema.virtual('ep_count').get(() => {
     let count = this.ep.length();
     return count;
-})
+});
+
+BangumiSchema.virtual('air_weekday').get(() => {
+    if (this.type === 'tv' && this.country === 'Japan') {
+        let date = dtime(this.air_date);
+        return date.format('dd');
+    }
+    else {
+        return '';
+    }
+});
 
 // BangumiSchema.virtual('quarter').get(() => {
 //     if (this.type === 'tv' && this.country === 'Japan') {

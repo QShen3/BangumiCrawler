@@ -3,7 +3,7 @@ const config = require('../config');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(`mongodb://${config.user ? config.user + ':' + config.password + '@' : ''}${config.host}:${config.port}/${config.db}`, {
+mongoose.connect(`mongodb://${config.mongoDB.user ? config.mongoDB.user + ':' + config.mongoDB.password + '@' : ''}${config.mongoDB.host}:${config.mongoDB.port}/${config.mongoDB.db}`, {
     poolSize: 10
 }, (err) => {
     if (err) {
@@ -17,13 +17,17 @@ require('./crt');
 require('./actor');
 require('./staff');
 require('./episode');
+require('./broadcaster');
+require('./network');
 
-exports = {
+module.exports = {
     Bangumi: mongoose.model('Bangumi'),
     Crt: mongoose.model('Crt'),
     Actor: mongoose.model('Actor'),
     Staff: mongoose.model('Staff'),
-    Episode: mongoose.model('Episode')
+    Episode: mongoose.model('Episode'),
+    BroadCaster: mongoose.model('Broadcaster'),
+    Network: mongoose.model('Network')
 }
 
 
