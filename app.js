@@ -1,6 +1,7 @@
-const { Bangumi, Crt, Actor, Staff, Episode, BroadCaster, Network } = require('./models/index');
+const fs = require('fs');
 const urllib = require('urllib');
 
+const { Bangumi, Crt, Actor, Staff, Episode, BroadCaster, Network } = require('./models/index');
 const config = require('./config');
 
 const failedList = [];
@@ -222,8 +223,22 @@ async function getDoc(bangumiId) {
 }
 
 (async () => {
-    for (let i = config.start; i <= config.end; i++) {
-        await getDoc(i);
+    let pos = process.argv.indexOf('-f');
+    if(pos >= 0){
+        let file = process.argv[pos + 1];
+        let list = fs.readFileSync(file).toString();
+        list = list.split(',');
+        for(let i of list){
+            await getDoc(i);
+        }
+        fs.writeFileSync('./failedList.txt', failedList.toString());
     }
+    else{
+        for (let i = config.start; i <= config.end; i++) {
+            await getDoc(i);
+        }
+        fs.writeFileSync('./failedList.txt', failedList.toString());
+    }
+
     process.exit(0);
 })();
