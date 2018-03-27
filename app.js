@@ -19,12 +19,27 @@ function resolveDate(input) {
 }
 
 function resolveDuration(input) {
-    if(input.indexOf(':') >= 0){
+    if (input.indexOf(':') >= 0) {
         let duration = input.split(':');
-        return parseInt(duration[0]) * 3600 + parseInt(duration[1]) * 60 + parseInt(duration[2]);
+        if(duration.length == 3){
+            return parseInt(duration[0]) * 3600 + parseInt(duration[1]) * 60 + parseInt(duration[2]);
+        }
+        else if(duration.length == 2){
+            return parseInt(duration[0]) * 60 + parseInt(duration[1]);
+        }
+        else {
+            return 0;
+        }
     }
-    else if(input.indexOf('m') >= 0) {
-        return 0;
+    else if (input.indexOf('m') >= 0) {
+        let hour = 0;
+        if (input.indexOf('h') >= 0) {
+            input = input.split('h');
+            hour = parseInt(input[0]);
+            input = input[1];
+        }
+        let minute = parseInt(input.replace('m', ''));
+        return hour * 3600 + minute * 60;
     }
     else {
         return 0;
@@ -79,7 +94,7 @@ async function getDoc(bangumiId) {
         id: bangumiId
     });
 
-    for (let staffObject of bgmObject.staff) {
+    for (let staffObject of (bgmObject.staff || [])) {
         let staff = await Staff.findOne({ name: staffObject.name }).exec();
         if (!staff) {
             staff = new Staff({
@@ -88,7 +103,7 @@ async function getDoc(bangumiId) {
                 images: staffObject.images,
             });
             staff.info = {};
-            if (staffObject.info.gender) {
+            if (staffObject.info && staffObject.info.gender) {
                 staff.info.gender = staffObject.info.gender;
             }
             staff.jobs = staff.jobs.concat(staffObject.jobs);
@@ -96,7 +111,14 @@ async function getDoc(bangumiId) {
         else {
             staff.jobs = Array.from(new Set(staff.jobs.concat(staffObject.jobs)));
         }
-        staff = await staff.save();
+        try {
+            staff = await staff.save();
+        }
+        catch (err) {
+            console.error(`${bangumiId}: ${err.message}`);
+            failedList.push(bangumiId);
+            return;
+        }
         bangumi.staff.push({
             name: staff.name,
             name_cn: staff.name_cn,
@@ -105,8 +127,8 @@ async function getDoc(bangumiId) {
         });
     }
 
-    for (let crtObject of bgmObject.crt) {
-        let crt = await Staff.findOne({ name: crtObject.name }).exec();
+    for (let crtObject of (bgmObject.crt || [])) {
+        let crt = await Crt.findOne({ name: crtObject.name }).exec();
         if (!crt) {
             crt = new Crt({
                 name: crtObject.name,
@@ -114,11 +136,11 @@ async function getDoc(bangumiId) {
                 images: crtObject.images,
             });
             crt.info = {};
-            if (crtObject.info.gender) {
+            if (crtObject.info && crtObject.info.gender) {
                 crt.info.gender = crtObject.info.gender;
             }
         }
-        for (let actorObject of crtObject.actors) {
+        for (let actorObject of (crtObject.actors || [])) {
             let actor = await Actor.findOne({ name: actorObject.name }).exec();
             if (!actor) {
                 actor = new Actor({
@@ -126,26 +148,47 @@ async function getDoc(bangumiId) {
                     name_cn: actorObject.name_cn,
                     images: actorObject.images
                 });
-                actor = await actor.save();
+                try {
+                    actor = await actor.save();
+                }
+                catch (err) {
+                    console.error(`${bangumiId}: ${err.message}`);
+                    failedList.push(bangumiId);
+                    return;
+                }
             }
             crt.cv.push(actor._id);
         }
         crt.cv = Array.from(new Set(crt.cv));
-        crt = await crt.save();
+        try {
+            crt = await crt.save();
+        }
+        catch (err) {
+            console.error(`${bangumiId}: ${err.message}`);
+            failedList.push(bangumiId);
+            return;
+        }
         bangumi.crt.push(crt._id);
     }
 
-    for (let epObject of bgmObject.eps) {
-        if (epObject.type == 0) {
-            let episode = new Episode({
-                name: epObject.name,
-                name_cn: epObject.name_cn,
-                duration: resolveDuration(epObject.duration),
-                air_date: resolveDate(epObject.airdate),
-                desc: epObject.desc,
-                status: epObject.status === 'Air' ? 1 : 0
-            });
+    for (let epObject of (bgmObject.eps || [])) {
+        let episode = new Episode({
+            name: epObject.name,
+            name_cn: epObject.name_cn,
+            duration: resolveDuration(epObject.duration),
+            air_date: resolveDate(epObject.airdate),
+            desc: epObject.desc,
+            status: epObject.status === 'Air' ? 1 : 0
+        });
+        try {
             episode = await episode.save();
+        }
+        catch (err) {
+            console.error(`${bangumiId}: ${err.message}`);
+            failedList.push(bangumiId);
+            return;
+        }
+        if (epObject.type == 0) {
             bangumi.ep.push({
                 title: `第${epObject.sort}话`,
                 name: episode.name,
@@ -154,12 +197,25 @@ async function getDoc(bangumiId) {
                 id: episode._id
             });
         }
-        else {
-
+        else if (epObject.type == 1) {
+            bangumi.sp.push({
+                title: `第${epObject.sort}话`,
+                name: episode.name,
+                name_cn: episode.name_cn,
+                status: episode.status,
+                id: episode._id
+            });
         }
     }
 
-    bangumi = await bangumi.save();
+    try {
+        bangumi = await bangumi.save();
+    }
+    catch (err) {
+        console.error(`${bangumiId}: ${err.message}`);
+        failedList.push(bangumiId);
+        return;
+    }
     console.log(`${bgmObject.name} | ${bgmObject.name_cn || ''} has been inserted.`);
 
     return;
