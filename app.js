@@ -23,7 +23,7 @@ function resolveDuration(input) {
     if (input.indexOf(':') >= 0) {
         let duration = input.split(':');
         if(duration.length == 3){
-            return parseInt(duration[0]) * 3600 + parseInt(duration[1]) * 60 + parseInt(duration[2]);
+            return (parseInt(duration[0]) || 0) * 3600 + (parseInt(duration[1]) || 0) * 60 + (parseInt(duration[2]) || 0);
         }
         else if(duration.length == 2){
             return parseInt(duration[0]) * 60 + parseInt(duration[1]);
