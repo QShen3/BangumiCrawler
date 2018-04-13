@@ -19,6 +19,7 @@ require('./staff');
 require('./episode');
 require('./broadcaster');
 require('./network');
+require('./statis');
 
 module.exports = {
     Bangumi: mongoose.model('Bangumi'),
@@ -27,7 +28,8 @@ module.exports = {
     Staff: mongoose.model('Staff'),
     Episode: mongoose.model('Episode'),
     BroadCaster: mongoose.model('Broadcaster'),
-    Network: mongoose.model('Network')
+    Network: mongoose.model('Network'),
+    Statis: mongoose.model('Statis')
 }
 
 
