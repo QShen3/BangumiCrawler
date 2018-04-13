@@ -2,7 +2,7 @@
   "name": "bangumicrawler",
   "version": "2.0.0",
   "description": "no description",
-  "main": "main.js",
+  "main": "app.js",
   "dependencies": {
     "mongoose": "^5.0.11",
     "time-formater": "^1.0.1",
