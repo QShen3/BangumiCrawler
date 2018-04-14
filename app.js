@@ -158,7 +158,9 @@ async function getDoc(bangumiId) {
                     return;
                 }
             }
-            crt.cv.push(actor._id);
+            if(crt.cv.indexOf(actor._id) == -1){
+                crt.cv.push(actor._id);
+            }          
         }
         crt.cv = Array.from(new Set(crt.cv));
         try {
