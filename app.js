@@ -22,10 +22,10 @@ function resolveDate(input) {
 function resolveDuration(input) {
     if (input.indexOf(':') >= 0) {
         let duration = input.split(':');
-        if(duration.length == 3){
+        if (duration.length == 3) {
             return (parseInt(duration[0]) || 0) * 3600 + (parseInt(duration[1]) || 0) * 60 + (parseInt(duration[2]) || 0);
         }
-        else if(duration.length == 2){
+        else if (duration.length == 2) {
             return parseInt(duration[0]) * 60 + parseInt(duration[1]);
         }
         else {
@@ -157,10 +157,21 @@ async function getDoc(bangumiId) {
                     failedList.push(bangumiId);
                     return;
                 }
+            }  
+            let flag = true;
+            for (let cv of crt.cv) {
+                if (cv.id.toString() == actor._id.toString()) {
+                    flag = false;
+                    break;
+                }
             }
-            if(crt.cv.indexOf(actor._id) == -1){
-                crt.cv.push(actor._id);
-            }          
+            if (flag) {
+                crt.cv.push({
+                    name: actor.name,
+                    name_cn: actor.name_cn,
+                    id: actor._id
+                });
+            }
         }
         crt.cv = Array.from(new Set(crt.cv));
         try {
@@ -226,16 +237,16 @@ async function getDoc(bangumiId) {
 
 (async () => {
     let pos = process.argv.indexOf('-f');
-    if(pos >= 0){
+    if (pos >= 0) {
         let file = process.argv[pos + 1];
         let list = fs.readFileSync(file).toString();
         list = list.split(',');
-        for(let i of list){
+        for (let i of list) {
             await getDoc(i);
         }
         fs.writeFileSync('./failedList.txt', failedList.toString());
     }
-    else{
+    else {
         for (let i = config.start; i <= config.end; i++) {
             await getDoc(i);
         }

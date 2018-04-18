@@ -76,43 +76,6 @@ const BangumiSchema = new Schema({
 BangumiSchema.index({ name: 1 });
 BangumiSchema.index({ name_cn: 1 });
 
-// BangumiSchema.virtual('air_year').get(function () {
-//     if(!this.air_date){
-//         return undefined;
-//     }
-//     let year = this.air_date.split('-')[0];
-//     return parseInt(year);
-// });
-
-// BangumiSchema.virtual('air_month').get(function () {
-//     if(!this.air_date){
-//         return undefined;
-//     }
-//     let month = this.air_date.split('-')[1];
-//     return parseInt(month);
-// });
-
-// BangumiSchema.virtual('ep_count').get(function () {
-//     if(!this.ep){
-//         return 0;
-//     }
-//     let count = this.ep.length;
-//     return count;
-// });
-
-// BangumiSchema.virtual('air_weekday').get(function() {
-//     if(!this.air_date){
-//         return undefined;
-//     }
-//     if (this.type === 'tv' && this.country === 'Japan') {
-//         let date = dtime(this.air_date);
-//         return date.format('d');
-//     }
-//     else {
-//         return '';
-//     }
-// });
-
 BangumiSchema.pre('save', function (next) {
     let now = new Date();
     this.update_time = now;
