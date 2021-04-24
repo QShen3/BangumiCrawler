@@ -4,7 +4,7 @@
   "description": "no description",
   "main": "app.js",
   "dependencies": {
-    "mongoose": "^5.0.11",
+    "mongoose": "^5.7.5",
     "time-formater": "^1.0.1",
     "urllib": "^2.26.0"
   },
