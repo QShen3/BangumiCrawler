@@ -28,7 +28,7 @@ async function main() {
 
     for (let i of bangumiList) {
         try {
-            var {data, res} = await urllib.request(`http://api.bgm.tv/subject/${i}?responseGroup=large`, { gzip: true });
+            var {data, res} = await urllib.request(`https://api.bgm.tv/subject/${i}?responseGroup=large`, { gzip: true });
         } catch (err) {
             console.error(`${i}: ${err.message}`);
             bangumiList.push(i);
