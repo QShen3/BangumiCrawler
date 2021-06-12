@@ -17,6 +17,21 @@ const client = new mongodb.MongoClient(uri, {
     useUnifiedTopology: true,
 });
 
+function resolveDot(obj) {
+    for (let i in obj) {
+        if (i.indexOf('.') > 0) {
+            delete obj[i];
+            continue;
+        }
+        if (obj[i] == null || obj[i] == [] || obj[i] == {}) {
+            continue;
+        }
+        if (obj[i] instanceof Object) {
+            resolveDot(obj[i])
+        }
+    }
+}
+
 async function main() {
     await client.connect();
 
@@ -57,6 +72,15 @@ async function main() {
         } catch (err) {
             console.error(`${i}: ${err.message}`);
             if (err.message.includes("E11000")) {
+                continue;
+            }
+            if (err.message.includes(`must not contain '.'`)) {
+                resolveDot(bangumiObject)
+                if (bangumiObject.type == 2) {
+                    await anime.insertOne(bangumiObject);
+                } else if (bangumiObject.type == 4) {
+                    await game.insertOne(bangumiObject);
+                }
                 continue;
             }
             bangumiList.push(i);
